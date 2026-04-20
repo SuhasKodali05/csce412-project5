@@ -3,7 +3,11 @@ version: 0.2
 phases:
   build:
     commands:
-      - echo "No build required for static website"
+      - echo "Deploying static site to S3..."
+      - aws s3 sync . s3://csce412skodali8.me/static-webpage-example --delete --exclude ".git/*" --exclude ".gitignore" --exclude ".DS_Store" --exclude "buildspec.yml"
+      - echo "Creating CloudFront invalidation..."
+      - aws cloudfront create-invalidation --distribution-id E2JFIWN13N58 --paths "/*"
+
 artifacts:
   files:
     - '**/*'
